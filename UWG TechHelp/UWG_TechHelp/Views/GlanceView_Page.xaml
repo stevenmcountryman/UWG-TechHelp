@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage  xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UWG_TechHelp.Views.GlanceView_Page"
+             BackgroundColor="#FFECECEC">
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Icon="Profile.png" Text="Me" Command="{Binding NewAcquaintanceCommand}" />
+    <ToolbarItem Icon="add.png" Text="New" Command="{Binding NewAcquaintanceCommand}" />
+  </ContentPage.ToolbarItems>
+  <TabbedPage.Children>
+  </TabbedPage.Children>
+</TabbedPage >

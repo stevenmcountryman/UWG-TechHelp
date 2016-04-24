@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UWG_TechHelp.Views.TicketsView"
+             BackgroundColor="Transparent">
+    <ListView ItemsSource="{Binding Tickets}"
+              CachingStrategy="RecycleElement"
+              RowHeight="120"
+              HasUnevenRows="false"
+              ItemTapped="ItemTapped"
+              IsPullToRefreshEnabled="true"
+              RefreshCommand="{Binding RefreshTicketsCommand}"
+              IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+              SeparatorColor="#FF555555">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell StyleId="disclosure" Height="120">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="12"/>
+              </Grid.ColumnDefinitions>
+              
+              <Label Grid.Row="0" Grid.ColumnSpan="4" Text="{Binding ticketString}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="13" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+              
+              <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="End" HorizontalOptions="Start" Margin="0" Spacing="0" >
+                <Label Text="{Binding location}" VerticalTextAlignment="Start" FontSize="13" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+                <Label Text="{Binding DisplayName}" VerticalTextAlignment="Start" FontSize="18" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+                <Label Text="{Binding title}" VerticalTextAlignment="Start" FontSize="15" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+              </StackLayout>
+              
+              <StackLayout Grid.Row="1" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" Margin="0" Spacing="0" >
+                <Label Text="{Binding status}" HorizontalTextAlignment="End" FontSize="13" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+                <Label Text="{Binding urgency}" HorizontalTextAlignment="End" FontSize="13" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+                <Label Text="{Binding lastUpdateTime}" HorizontalTextAlignment="End" FontSize="13" LineBreakMode="TailTruncation" TextColor="#FF555555" />
+              </StackLayout>
+              
+              <Label Text="{Binding desc}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" LineBreakMode="TailTruncation" TextColor="#FF878787" />
+            
+              <Grid Grid.Row="3" Grid.ColumnSpan="4" BackgroundColor="#FF555555" HeightRequest="2" />
+            </Grid>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

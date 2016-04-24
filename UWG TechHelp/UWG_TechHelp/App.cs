@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using UWG_TechHelp.Views;
 using Xamarin.Forms;
 
 namespace UWG_TechHelp
@@ -11,20 +11,18 @@ namespace UWG_TechHelp
     {
         public App()
         {
-            // The root page of your application
-            MainPage = new ContentPage
-            {
-                Content = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children = {
-                        new Label {
-                            XAlign = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms!"
-                        }
-                    }
-                }
-            };
+            var navPage =
+                    new NavigationPage(
+                        new GlanceView_Page()
+                        {
+                            Title = "UWG TechHelp"                            
+                        })
+                    {
+                        BarBackgroundColor = Color.FromHex("547799"),
+                        BarTextColor = Color.White
+                    };
+
+            MainPage = navPage;
         }
 
         protected override void OnStart()
