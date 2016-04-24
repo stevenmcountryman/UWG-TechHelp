@@ -91,66 +91,9 @@ namespace UWG_TechHelp.Resources
                 {
                     foreach (string ticket in allDetails)
                     {
-                        var keys = ticket.Split(new string[] { "&KEY" }, StringSplitOptions.None);
-                        if (keys.Count() == 12)
-                        {
-                            string building = "";
-                            string firstName = "";
-                            string lastName = "";
-                            string[] oldDescriptions = new string[10];
-                            string description = "";
-                            string[] assignees = new string[10];
-                            string ticketnum = "";
-                            string urgency = "";
-                            string status = "";
-                            string title = "";
-                            string lastUpdate = "";
-                            string roomNumber = "";
-                            foreach (string key in keys)
-                            {
-                                if (key.Contains("Building:")) building = key.Substring(key.IndexOf(":") + 1).Replace("__b", " ");
-                                else if (key.Contains("FirstName:")) firstName = key.Substring(key.IndexOf(":") + 1);
-                                else if (key.Contains("LastName:")) lastName = key.Substring(key.IndexOf(":") + 1);
-                                else if (key.Contains("Descriptions:"))
-                                {
-                                    oldDescriptions = key.Substring(key.IndexOf(":") + 1).Replace("&nbsp;", "\n").Replace("\r", "").Replace("\n\n", "\n").Replace("<br />", "\n").Replace("<! ", "<!").Split(new string[] { "<!" }, StringSplitOptions.None);
-                                    for (int i = 1; i < oldDescriptions.Count(); i++)
-                                    {
-                                        oldDescriptions[i] = oldDescriptions[i].Replace("\n\n\n", "\n").Replace("\n\n", "\n").Replace("--/*SC*/ ", "").Replace(" /*EC*/-->", ":").Replace(" >", ":");
-                                        oldDescriptions[i] = oldDescriptions[i].Substring(0, 19) + " - " + oldDescriptions[i].Substring(19);
-                                    }
-                                    oldDescriptions = oldDescriptions.Reverse<string>().ToArray<string>();
-                                }
-                                else if (key.Contains("Assignees:")) assignees = key.Substring(key.IndexOf(":") + 1).Split(' ');
-                                else if (key.Contains("Description:"))
-                                {
-                                    description = key.Substring(key.IndexOf("\n") + 2).Replace("&nbsp;", "\n").Replace("\r", "").Replace("\n\n", "\n").Replace("<br />", "\n");
-                                    while (description.Length > 0 && description.Substring(0, 1) == "\n") description = description.Substring(1);
-                                }
-                                else if (key.Contains("Issue Number:")) ticketnum = key.Substring(key.IndexOf(":") + 1);
-                                else if (key.Contains("Urgency:")) urgency = key.Substring(key.IndexOf(":") + 1).Replace("__f", " ");
-                                else if (key.Contains("Status:")) status = key.Substring(key.IndexOf(":") + 1).Replace("__b", " ");
-                                else if (key.Contains("Title:")) title = key.Substring(key.IndexOf(":") + 1);
-                                else if (key.Contains("LastUpdated:")) lastUpdate = key.Substring(key.IndexOf(":") + 1);
-                                else if (key.Contains("Room:")) roomNumber = key.Substring(key.IndexOf(":") + 1);
-                            }
-                            var newTicket = new Ticket()
-                            {
-                                firstName = firstName,
-                                lastName = lastName,
-                                roomNumber = roomNumber,
-                                building = building,
-                                lastUpdated = lastUpdate,
-                                desc = description,
-                                oldDescs = oldDescriptions,
-                                status = status,
-                                title = title,
-                                ticketNum = ticketnum,
-                                priority = urgency,
-                                assignees = assignees.ToList()
-                            };
-                            allTickets.Add(newTicket);
-                        }
+                        var ticketData = ticket.Split(new string[] { "&KEY" }, StringSplitOptions.None);
+                        Ticket newTicket = Ticket.ParseTicket(ticketData);
+                        allTickets.Add(newTicket);
                     }
                     return allTickets;
                 }
@@ -325,15 +268,26 @@ namespace UWG_TechHelp.Resources
         /// Gets all current UWG service statuses, whether they are running or not
         /// </summary>
         /// <returns>Returns a list of all services and their statuses</returns>
-        public static async Task<List<string>> getServiceStatuses()
+        public static async Task<List<Service>> getServices(List<string> statuses)
         {
             try
             {
                 var result = await getHTTPRequestResult("https://apps.westga.edu/sd/share/get_statuses.php");
                 var statusJSON = result.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\\", "").Replace("}", "");
-                var allStatuses = statusJSON.Split('{').ToList<string>();
-                allStatuses.Remove("");
-                return allStatuses;
+                var services = statusJSON.Split('{').ToList<string>();
+                services.Remove("");
+
+                var allServices = new List<Service>();
+                if (services != null && services.Count() > 0)
+                {
+                    foreach (string service in services)
+                    {
+                        Service newService = Service.ParseService(service, statuses);
+                        allServices.Add(newService);
+                    }
+                    return allServices;
+                }
+                else return null;
             }
             catch
             {

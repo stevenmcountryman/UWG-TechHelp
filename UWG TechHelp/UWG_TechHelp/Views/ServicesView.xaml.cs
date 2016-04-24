@@ -3,11 +3,11 @@ using Xamarin.Forms;
 
 namespace UWG_TechHelp.Views
 {
-    public partial class TicketsView : ContentPage
+    public partial class ServicesView : ContentPage
     {
-        protected TicketsViewModel ViewModel => BindingContext as TicketsViewModel;
+        protected ServicesViewModel ViewModel => BindingContext as ServicesViewModel;
 
-        public TicketsView()
+        public ServicesView()
         {
             InitializeComponent();
         }
@@ -16,7 +16,7 @@ namespace UWG_TechHelp.Views
         {
             base.OnAppearing();
 
-            ViewModel.LoadTicketsCommand.Execute(null);
+            ViewModel.LoadServicesCommand.Execute(null);
         }
 
         /// <summary>

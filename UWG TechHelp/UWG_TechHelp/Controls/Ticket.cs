@@ -1,8 +1,7 @@
 ﻿using MvvmHelpers;
 using System;
 using System.Collections.Generic;
-using UWG_TechHelp.Resources;
-using Windows.UI.Xaml.Controls;
+using System.Linq;
 
 namespace UWG_TechHelp.Controls
 {
@@ -74,6 +73,65 @@ namespace UWG_TechHelp.Controls
                 default:
                     return "Other";
             }
+        }
+
+        public static Ticket ParseTicket(string[] ticketData)
+        {
+            string building = "";
+            string firstName = "";
+            string lastName = "";
+            string[] oldDescriptions = new string[10];
+            string description = "";
+            string[] assignees = new string[10];
+            string ticketnum = "";
+            string urgency = "";
+            string status = "";
+            string title = "";
+            string lastUpdate = "";
+            string roomNumber = "";
+            foreach (string key in ticketData)
+            {
+                if (key.Contains("Building:")) building = key.Substring(key.IndexOf(":") + 1).Replace("__b", " ");
+                else if (key.Contains("FirstName:")) firstName = key.Substring(key.IndexOf(":") + 1);
+                else if (key.Contains("LastName:")) lastName = key.Substring(key.IndexOf(":") + 1);
+                else if (key.Contains("Descriptions:"))
+                {
+                    oldDescriptions = key.Substring(key.IndexOf(":") + 1).Replace("&nbsp;", "\n").Replace("\r", "").Replace("\n\n", "\n").Replace("<br />", "\n").Replace("<! ", "<!").Split(new string[] { "<!" }, StringSplitOptions.None);
+                    for (int i = 1; i < oldDescriptions.Count(); i++)
+                    {
+                        oldDescriptions[i] = oldDescriptions[i].Replace("\n\n\n", "\n").Replace("\n\n", "\n").Replace("--/*SC*/ ", "").Replace(" /*EC*/-->", ":").Replace(" >", ":");
+                        oldDescriptions[i] = oldDescriptions[i].Substring(0, 19) + " - " + oldDescriptions[i].Substring(19);
+                    }
+                    oldDescriptions = oldDescriptions.Reverse<string>().ToArray<string>();
+                }
+                else if (key.Contains("Assignees:")) assignees = key.Substring(key.IndexOf(":") + 1).Split(' ');
+                else if (key.Contains("Description:"))
+                {
+                    description = key.Substring(key.IndexOf("\n") + 2).Replace("&nbsp;", "\n").Replace("\r", "").Replace("\n\n", "\n").Replace("<br />", "\n");
+                    while (description.Length > 0 && description.Substring(0, 1) == "\n") description = description.Substring(1);
+                }
+                else if (key.Contains("Issue Number:")) ticketnum = key.Substring(key.IndexOf(":") + 1);
+                else if (key.Contains("Urgency:")) urgency = key.Substring(key.IndexOf(":") + 1).Replace("__f", " ");
+                else if (key.Contains("Status:")) status = key.Substring(key.IndexOf(":") + 1).Replace("__b", " ");
+                else if (key.Contains("Title:")) title = key.Substring(key.IndexOf(":") + 1);
+                else if (key.Contains("LastUpdated:")) lastUpdate = key.Substring(key.IndexOf(":") + 1);
+                else if (key.Contains("Room:")) roomNumber = key.Substring(key.IndexOf(":") + 1);
+            }
+            return new Ticket()
+            {
+                firstName = firstName,
+                lastName = lastName,
+                roomNumber = roomNumber,
+                building = building,
+                lastUpdated = lastUpdate,
+                desc = description,
+                oldDescs = oldDescriptions,
+                status = status,
+                title = title,
+                ticketNum = ticketnum,
+                priority = urgency,
+                assignees = assignees.ToList()
+            };
         }
     }
 }

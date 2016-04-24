@@ -12,11 +12,7 @@ namespace UWG_TechHelp
         public App()
         {
             var navPage =
-                    new NavigationPage(
-                        new GlanceView_Page()
-                        {
-                            Title = "UWG TechHelp"                            
-                        })
+                    new NavigationPage(new GlanceView())
                     {
                         BarBackgroundColor = Color.FromHex("547799"),
                         BarTextColor = Color.White

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UWG_TechHelp.Views.ServicesView"
+             BackgroundColor="Transparent">
+  <ListView ItemsSource="{Binding Services}"
+            CachingStrategy="RecycleElement"
+            RowHeight="120"
+            HasUnevenRows="false"
+            ItemTapped="ItemTapped"
+            IsPullToRefreshEnabled="true"
+            RefreshCommand="{Binding RefreshTicketsCommand}"
+            IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+            SeparatorColor="#FF555555">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <ViewCell StyleId="disclosure" Height="120">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Text="{Binding platform}" Grid.Row="0" FontFamily="Segoe UI" FontSize="14" TextColor="#FF555555" HorizontalTextAlignment="Center" LineBreakMode="WordWrap" />
+            <Label Text="{Binding status}" Grid.Row="2" FontFamily="Segoe UI" FontSize="13" TextColor="#FF555555" HorizontalTextAlignment="Center" LineBreakMode="WordWrap" />
+          </Grid>
+        </ViewCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</ContentPage>
