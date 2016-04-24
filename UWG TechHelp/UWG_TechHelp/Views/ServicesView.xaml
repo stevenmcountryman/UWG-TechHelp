@@ -5,7 +5,7 @@
              BackgroundColor="Transparent">
   <ListView ItemsSource="{Binding Services}"
             CachingStrategy="RecycleElement"
-            RowHeight="120"
+            RowHeight="60"
             HasUnevenRows="false"
             ItemTapped="ItemTapped"
             IsPullToRefreshEnabled="true"
@@ -14,7 +14,7 @@
             SeparatorColor="#FF555555">
     <ListView.ItemTemplate>
       <DataTemplate>
-        <ViewCell StyleId="disclosure" Height="120">
+        <ViewCell StyleId="disclosure" Height="60">
           <Grid>
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto"/>
